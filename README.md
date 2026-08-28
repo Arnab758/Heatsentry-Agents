@@ -20,6 +20,11 @@
 
 ## 🗺️ System Visual Architecture & Topology (Google Cloud Run + Gemini Streaming)
 
+<div align="center">
+  <img src="./docs/architecture-diagram.jpg" alt="HeatSentry-OS System Architecture Diagram" width="100%" style="border-radius: 12px; max-width: 1100px; box-shadow: 0 4px 24px rgba(0,0,0,0.4); margin-bottom: 16px;" />
+  <p><em><strong>Figure 1:</strong> HeatSentry-OS End-to-End System Architecture Topology — React 18 Canvas GIS Client, Google Cloud Run Express Backend, 10-Agent Autonomous Nexus with Nash Bargaining, Google GenAI Multimodal AI Core (Gemini 3.7 Flash, Gemini 3.1 Audio, Gemma 2, Veo & Lyria), and SHA-256 Cryptographic Governance Layer.</em></p>
+</div>
+
 ```
 ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════
                      HEATSENTRY-OS: GOOGLE CLOUD RUN + GEMINI 3.7 STREAMING ARCHITECTURE
@@ -361,28 +366,29 @@ The HeatSentry Express/Node.js backend exposes high-performance REST endpoints:
 
 ## 7. Technology Stack
 
-* **Frontend:** React 18, TypeScript, Tailwind CSS, Lucide Icons, Recharts, Canvas Heatmap Rendering
-* **Backend:** Node.js, Express, tsx, REST API Proxying
-* **AI & Neural Reasoning:** Google GenAI SDK (`@google/genai`), Gemini 2.5 Flash with Chain-of-Thought Reasoning
-* **Climate Intelligence:** FortyGuard 2-Meter Ambient Mesh & Satellite Land Surface Temperature (LST)
-* **Security & Cryptography:** Web Crypto API, SHA-256 Merkle Chaining
-* **Standards & Compliance:** FEMA Incident Command System (ICS-201), OSHA Technical Manual (OTM) Section III, NOAA CAP v1.2
+* **Frontend:** React 19 / 18, TypeScript, Tailwind CSS, Lucide Icons, Recharts, Canvas 2D GIS Heatmap Rendering
+* **Backend Container:** Google Cloud Run, Node.js 20+, Express, tsx, REST API & Server-Sent Events (SSE) Proxying
+* **AI & Multi-Modal Foundation:** Google GenAI SDK (`@google/genai`), Gemini 3.7 Flash (SSE Token Streaming Incident Copilot), Gemini 3.1 Flash Audio (Multilingual Neural TTS in EN/ES/AR), Google Gemma 2 9B (Edge Triage), Veo & Lyria Protocols
+* **Climate Intelligence:** 2-Meter Ambient Urban Mesh & Satellite Land Surface Temperature (LST) Telemetry
+* **Security & Cryptography:** Web Crypto API, SHA-256 Merkle Chained Block Ledger
+* **Standards & Compliance:** FEMA Incident Command System (ICS-201), OSHA Heat Safety Standards (29 CFR § 1910.132), NOAA CAP v1.2
 
 ---
 
 ## 8. Installation & Local Development
 
 ```bash
-# 1. Clone the repository
-git clone https://github.com/your-org/heatsentry.git
-cd heatsentry
+# 1. Clone the repository (or export from AI Studio / GitHub)
+git clone https://github.com/<YOUR_GITHUB_USERNAME>/heatsentry-os.git
+cd heatsentry-os
 
-# 2. Install dependencies
+# 2. Install project dependencies
 npm install
 
 # 3. Configure environment variables (.env)
+# Create a .env file in the root directory:
 GEMINI_API_KEY=your_gemini_api_key_here
-FORTYGUARD_API_KEY=your_fortyguard_api_key_here
+FORTYGUARD_API_KEY=your_fortyguard_api_key_here  # Optional: Fallback synthetic physics engine active
 
 # 4. Launch the local development server (binds to http://localhost:3000)
 npm run dev
