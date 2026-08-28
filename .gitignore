@@ -1,0 +1,28 @@
+# Secrets — NEVER commit or zip these
+.env
+.env.*
+!.env.example
+
+# Node
+node_modules/
+dist/
+
+# Python
+__pycache__/
+*.pyc
+
+# Logs / temp
+*.log
+.DS_Store
+
+# FortyGuard real-data cache (raw API responses + manifests) - NEVER commit or zip
+# Same CACHED pattern as the official FortyGuard temperature-api-quickstart repo.
+data/
+outputs/
+
+# Duplicate / temp
+src/src/
+.freebuff/
+planners.py
+simulate.py
+_sync_result.json

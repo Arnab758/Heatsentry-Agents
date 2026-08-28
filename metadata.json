@@ -1,0 +1,6 @@
+{
+  "name": "HeatSentry - Real-Time Urban Heat Resilience Agentic System",
+  "description": "Multi-agent urban heat-resilience digital twin & response system with counterfactual replay, FortyGuard 2-meter Temperature API integration, Rothfusz/WBGT risk engine, and Gemini reasoning.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
