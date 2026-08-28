@@ -396,9 +396,6 @@ npm run start
 
 ## 9. Conclusion: Ready for Partnership & Deployment
 
-HeatSentry is not a conceptual mockup—it is a production-grade, mathematically verified municipal heat resilience mesh built directly on FortyGuard’s proprietary 2-meter intelligence. By transforming thermal data into autonomous physical protection, HeatSentry makes cities cooler, workforces safer, and power grids unbreakable.
+HeatSentry is not a conceptual mockup—it is a production-grade, mathematically verified municipal heat resilience mesh built directly on FortyGuard’s 2-meter intelligence. By transforming thermal data into autonomous physical protection, HeatSentry makes cities cooler, workforces safer, and power grids unbreakable.
 
-**Inquiries regarding municipal pilots, utility integration, or FortyGuard licensing:**
-* *Lead Engineering Team: HeatSentry Urban Resilience Project*
-* *Platform Architecture: Multi-Agent Autonomous Urban Defense*
 
