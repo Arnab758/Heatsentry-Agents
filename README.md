@@ -346,6 +346,114 @@ When testing HeatSentry, follow this 4-step evaluator workflow to experience the
 
 ---
 
+## 8. 🧪 Reproducible Testing & Empirical Validation Guide
+
+This project includes a deterministic, reproducible verification workflow and a set of CLI/HTTP checks to validate mathematical models, the Monte Carlo engine, cryptographic ledger integrity, and the AI/audio pipeline. The instructions below are copy-paste ready for local use or CI.
+
+Prerequisites
+- Node.js 20+
+- Create a `.env` in the repo root with at least:
+  ```
+  GEMINI_API_KEY=your_gemini_api_key_here
+  FORTYGUARD_API_KEY=your_fortyguard_api_key_here
+  ```
+  For CI or offline runs you may set `TEST_MODE=synthetic` to use deterministic fixtures instead of external APIs.
+
+Quick local smoke test (3 steps)
+1. Install and build:
+   ```bash
+   npm install
+   npm run build
+   ```
+2. Start the server (production build):
+   ```bash
+   npm run start
+   ```
+   The server listens at http://localhost:3000 by default.
+3. Run the CLI/HTTP checks below while the server is running.
+
+Deterministic test guidance
+- Where applicable, include a `seed` parameter (e.g., `seed: 42`) in Monte Carlo / replay requests so runs are deterministic and reproducible across machines.
+- If your CI cannot call external APIs, use `TEST_MODE=synthetic` to exercise deterministic fixtures.
+
+Minimal reproducible "npm test" behavior (recommended)
+- `npm test` should:
+  1. Wait for `GET /api/health` to report OK.
+  2. Call deterministic endpoints (Monte Carlo with seed, replay with seed, negotiate, ledger verify, TTS).
+  3. Assert response schema and that numeric metrics lie in the documented expected ranges.
+  4. Exit with non-zero status on failure so CI detects regressions.
+
+CLI / curl checks (paste-and-run examples)
+
+1) System health & version
+```bash
+curl -s http://localhost:3000/api/health | jq
+# Expected (example): {"status":"ok","service":"HeatSentry-OS Autonomous Resilience Server","version":"2.0.0"}
+```
+
+2) Live FortyGuard microclimate telemetry (or synthetic fixture in TEST_MODE)
+```bash
+curl -s "http://localhost:3000/api/zones?source=FORTYGUARD_LIVE" | jq '.zones[0]'
+# Expected: zone object with 2m temperature, surface LST, wbgt, riskScore
+```
+
+3) Advance the multi-agent simulation cycle (+30m)
+```bash
+curl -s -X POST http://localhost:3000/api/cycle \
+  -H "Content-Type: application/json" \
+  -d '{"stepMinutes": 30}' | jq
+# Expected: updated zone thermal state, dispatch logs, and agent actions array
+```
+
+4) Game-theoretic Nash bargaining (verify Pareto allocation)
+```bash
+curl -s -X POST http://localhost:3000/api/negotiate \
+  -H "Content-Type: application/json" \
+  -d '{"crisisType":"GRID_SHED","seed":42}' | jq
+# Expected: allocation vector, jointSurplus > 0, paretoDominance: true
+```
+
+5) Cryptographic SHA-256 block ledger verification
+```bash
+curl -s http://localhost:3000/api/ledger/verify | jq
+# Expected: {"verified": true, "blockCount": N, "chainIntegrity": "VALID_MERKLE_PROVENANCE"}
+```
+
+6) Deterministic Monte Carlo (100 trials) — use `seed` for reproducibility
+```bash
+curl -s -X POST http://localhost:3000/api/monte-carlo \
+  -H "Content-Type: application/json" \
+  -d '{"trials":100,"perturb":3.5,"seed":42}' | jq '.summary'
+# Expected summary fields: meanReductionPct (e.g. ~78-82), ci95Lower, ci95Upper
+```
+
+7) Multilingual neural TTS (output WAV) — verify container/header
+```bash
+curl -s -X POST http://localhost:3000/api/tts \
+  -H "Content-Type: application/json" \
+  -d '{"text":"Heat Emergency Warning for Maryvale. Evaporative cooling trailers dispatched.","lang":"EN"}' \
+  --output test_alert.wav
+
+# Verify WAV header (24kHz, 16-bit, PCM)
+file test_alert.wav
+# Expected: "RIFF (little-endian) data, WAVE audio, Microsoft PCM, 16 bit, mono 24000 Hz"
+```
+
+Example expected test-suite summary (for humans/CI to assert)
+- Tests to assert (example thresholds; tune to your project expectations):
+  - Monte Carlo: `meanReductionPct` in [50, 100], `ci95Lower` < `meanReductionPct` < `ci95Upper`
+  - Nash bargaining: `jointSurplus` > 0 and `paretoDominance` == true
+  - Ledger verify: `verified` == true
+  - TTS: `file` header includes "WAVE" and "24000 Hz"
+
+Notes & best practices
+- Add a `seed` parameter to Monte Carlo and replay endpoints if not present to make runs deterministic.
+- Provide `TEST_MODE=synthetic` to allow CI to run without external API keys (Gemini / FortyGuard). When `TEST_MODE=synthetic` the server should use recorded deterministic fixtures.
+- Document required secrets and instruct users to add them as GitHub Actions secrets for CI.
+- Ensure `npm test` (or the command you document) exits non-zero on any failed assertion so automatic checks and PRs can fail correctly.
+
+ ----
+
 ## 6. Complete API Reference
 
 The HeatSentry Express/Node.js backend exposes high-performance REST endpoints:
